@@ -12,6 +12,7 @@ const usersRoute = require('./api/routes/user');
 const authRoute = require('./api/routes/auth')
 const shopRoute = require('./api/routes/shop')
 
+// DataBase
 const url = 'mongodb://localhost:27017/anyshop';
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;

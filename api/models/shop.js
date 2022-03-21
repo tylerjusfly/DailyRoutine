@@ -16,8 +16,13 @@ const ShopSchema = mongoose.Schema({
     },
     supportEmail : {type : String, default : ""},
     shopOwner : {type : mongoose.Schema.Types.ObjectId, ref: 'User'},
-    sellerNotes : {type : String, default : ""}
-});
+    sellerNotes : {type : String, default : ""},
+    history : {
+      type : Array,
+      default : []
+    }
+}, {timestamps : true}
+);
 
 ShopSchema.statics.shopNameExist = async function(shopName) {
   try {

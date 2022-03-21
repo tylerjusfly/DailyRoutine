@@ -9,8 +9,9 @@ const ProductSchema = mongoose.Schema({
     default : 'SerialNumber'
   },
   serialCode :  {type : String , default : ''},
-  image : {type : String , default : ''},
-  price : { type : Number , default : ''},
+  category : { type : mongoose.Schema.Types.ObjectId, ref: 'Category', required : true},
+  image : {data : Buffer , contentType : String },
+  price : { type : Number , default : 0.00},
   stockCount :  {type : Number , default: 0},
   shop : {type : mongoose.Schema.Types.ObjectId, ref: 'Shop'},
 });

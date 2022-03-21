@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router({mergeParams : true})
-const Product = require('../models/products');
 const {verifyToken, verifyTokenAndAdmin} = require('../controllers/verifyToken');
 const {productController} = require('../controllers/products')
 

@@ -1,35 +1,65 @@
 const Product = require('../models/products');
 const Shop = require('../models/shop');
+const formidable = require('formidable');
+const fs = require('fs')
+const _ = require('lodash');
 
 exports.productController = {
   create : async(req, res, next) => {
-    const product = {
-      name : req.body.name
-    }
+     const shop = await Shop.findById(req.params.shopId);
+       if(!shop){
+         res.status(500).json({ 
+           message : "Shop Not Found"
+          });
+      }
 
-    const shop = await Shop.findById(req.params.shopId);
-    if(!shop){
-      res.status(500).json({
-        message : "Shop Not Found"
-      });
-    }
-    // console.log(shop)
-    const newProduct = new Product(product)
-    newProduct.shop = shop
-    try {
-      await newProduct.save()
-      res.status(200).json({
-        message : `product created at ${shop.shopName} `,
-        createdItem : {
-            id : newProduct._id,
-            name : newProduct.name,
-            shopId : newProduct.shop
+    let form = new formidable.IncomingForm()
+    form.keepExtensions = true
+    form.parse(req, (err, fields, files) => {
+      if(err){
+        return res.status(400).json({ error : "image could not be upoaded"});
+      }
+
+      // check for all fields
+      const {name, category} = fields
+      if(!name || !category){
+        return res.status(400).json({ error : "All fields are required"});
+      }
+      let products = new Product(fields);
+      products.shop = shop
+
+      if(files.image){
+        console.log('FILES PHOTO :', files.image)
+        // if file size is greater than 1mb == 1000000
+        if (files.image.size > 1000000){
+          return res.status(400).json({ error : "image should be less than 1mb "});
         }
-      });
-      
-    } catch (error) {
-      res.status(500).json(error)   
-    }
+        products.image.data = fs.readFileSync(files.image.filepath)
+        products.image.contentType = files.image.mimetype
+      }
+
+        products.save((err, data) => {
+          if(err) {
+         res.status(500).json({
+           message : "There is an error creating profile",
+           error : err
+         })  
+       } //end of error
+       res.status(201).json({
+        message : `product created at ${shop.shopName} `,
+            createdItem : {
+                id : data._id,
+                name : data.name,
+                shopId : data.shop,
+                category : data.category,
+                image : data.image
+            }
+       })
+
+        });
+
+    })
+
   }, //end of create
 
   getAll : async(req, res, next) => {
