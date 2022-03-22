@@ -5,6 +5,20 @@ const fs = require('fs')
 const _ = require('lodash');
 
 exports.productController = {
+  productById : async(req, res, next, id) => {
+    const product = await Product.findById(id)
+    if(!product){ res.status(500).json({ message : "Product Does not exist"});}
+    try {
+      req.product = product
+      next()
+    } catch (error) {
+      res.status(500).json({ message : "Product Not Found"});  
+    }
+
+
+  },
+
+
   create : async(req, res, next) => {
      const shop = await Shop.findById(req.params.shopId);
        if(!shop){
@@ -82,41 +96,76 @@ exports.productController = {
     });
   },
 
-  getById : async(req, res, next) => {
-    const id = req.params.productId;
-    const product = await Product.findById(id).populate('shop', 'shopName')
-    if(!product){  
-      res.status(400).json({message : "No valid id entry for the provided id."})
-    }
-
-    try {
-      res.status(200).json({
-        message : "Get Product by Id",
-        product : product
-      })
-    } catch (err) {
-      res.status(500).json({
-        error : err
-      })
-    };
+  getById : (req, res, next) => {
+    req.product.image = undefined
+    return res.status(200).json(req.product)
+    
       
     }, //end of get by id
 
-    Edit : async(req, res , next) => {
-      
-      try{
-        const updatedprod = await Product.findByIdAndUpdate(req.params.productId, {
-          $set : req.body
-        }, {new : true});
-        res.status(200).json(updatedprod);
-      }
-      catch(err){
-        console.log(err);
-        res.status(500).json(err);
-      }
+    Edit : (req, res , next) => {
+
+
+      let form = new formidable.IncomingForm()
+      form.keepExtensions = true
+      form.parse(req, (err, fields, files) => {
+        if(err){
+          return res.status(400).json({ error : "image could not be upoaded"});
+        }
+          console.log(req.product)
+        // check for all fields
+        const {name, desc, productType, serialCode, price, stockCount, category} = fields
+        if( !name|| !desc|| !productType|| !serialCode|| !price || !stockCount || !category){
+          return res.status(400).json({ error : "All fields are required"});
+        }
+        let product = req.product;
+        product = _.extend(product, fields)
   
+        if(files.image){
+          console.log('FILES PHOTO :', files.image)
+          // if file size is greater than 1mb == 1000000
+          if (files.image.size > 1000000){
+            return res.status(400).json({ error : "image should be less than 1mb "});
+          }
+          product.image.data = fs.readFileSync(files.image.filepath)
+          product.image.contentType = files.image.mimetype
+        }
+  
+          product.save((err, data) => {
+            if(err) {
+           res.status(500).json({
+             message : "There is an error updating products",
+             error : err
+           })  
+         } //end of error
+         res.status(201).json({
+          message : 'product updated',
+              createdItem : data
+         })
+  
+          });
+  
+      })
+      
+     
   
     },
+
+    delete : async(req, res, next) => {
+      let product = req.product
+      try {
+        const delprod = await product.remove()
+        res.status(200).json({
+          product : null,
+          message : "product deleted Successfully"
+                })
+        
+      } catch (error) {
+        res.status(500).json("Product Could not be deleted");
+        
+      }
+
+    }
     
 
 

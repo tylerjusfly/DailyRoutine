@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // Creating Routes
+const indexRoute = require('./api/routes/index');
 const productRoute = require('./api/routes/products');
 const ordersRoute = require('./api/routes/orders');
 const usersRoute = require('./api/routes/user');
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 // Routes handling requests
+app.use('/', indexRoute)
 app.use('/products', productRoute);
 app.use('/orders', ordersRoute);
 app.use('/users', usersRoute);

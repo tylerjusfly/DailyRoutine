@@ -9,7 +9,7 @@ exports.userController = {
     
     }
     try{
-      const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+      const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
         $set : req.body
       }, {new : true});
       res.status(200).json(updatedUser);
@@ -23,7 +23,7 @@ exports.userController = {
 
   getBYId : async(req, res , next) => {
     try{
-      const user = await User.findById(req.params.id);
+      const user = await User.findById(req.params.userId);
       res.status(200).json({data : user})
     }
     catch(err){
@@ -34,7 +34,7 @@ exports.userController = {
   // delete
   delete : async(req, res , next) => {
       try{
-        await User.findByIdAndDelete(req.params.id);
+        await User.findByIdAndDelete(req.params.userId);
         res.status(200).json({message : "user has been deleted."})
       }
       catch(err){

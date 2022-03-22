@@ -2,9 +2,9 @@
   "name": "any-shop",
   "version": "1.0.0",
   "description": "A NodeJs Restful Api",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

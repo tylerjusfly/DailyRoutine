@@ -59,7 +59,7 @@ exports.authController = {
           const token = jwt.sign({
             id : user[0]._id,
             isAdmin : user[0].isAdmin
-          }, 'abcd12345', { expiresIn : '1d'})
+          }, 'abcd12345', { expiresIn : '30d'})
           return res.status(200).json({ message : 'Auth Success', token : token})
         }
         // failed
