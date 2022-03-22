@@ -6,14 +6,14 @@ const {productController} = require('../controllers/products')
 
 router.post('/', verifyTokenAndShop, productController.create);
 
-router.get('/', verifyTokenAndAdmin, productController.getAll);
+router.get('/', verifyTokenAndShop, productController.getAll);
 
 router.get('/:productId', verifyTokenAndShop, productController.getById);
 
 // edit product from shops
-router.put('/:productId', verifyToken, productController.Edit);
+router.put('/:productId', verifyTokenAndShop, productController.Edit);
 
-router.delete('/del/:productId', verifyToken, verifyTokenAndAuth, productController.delete)
+router.delete('/del/:productId', verifyTokenAndShop, productController.delete)
 
 
 

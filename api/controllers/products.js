@@ -7,7 +7,7 @@ const _ = require('lodash');
 exports.productController = {
   productById : async(req, res, next, id) => {
     // console.log(req.shop)
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('shop', 'shopName')
 
     if(!product){ res.status(500).json({ message : "Product Does not exist"});}
     try {
@@ -100,7 +100,7 @@ exports.productController = {
 
   getById : (req, res, next) => {
     req.product.image = undefined
-    return res.status(200).json(req.product)
+    return res.status(200).json(req.product);
     
       
     }, //end of get by id
@@ -114,7 +114,7 @@ exports.productController = {
         if(err){
           return res.status(400).json({ error : "image could not be upoaded"});
         }
-          console.log(req.product)
+        
         // check for all fields
         const {name, desc, productType, serialCode, price, stockCount, category} = fields
         if( !name|| !desc|| !productType|| !serialCode|| !price || !stockCount || !category){
