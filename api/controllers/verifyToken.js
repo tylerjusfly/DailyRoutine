@@ -37,10 +37,21 @@ const verifyTokenAndAdmin = (req, res, next) => {
     }
     else{
       console.log(req.user)
-      res.status(403).json({msg : "you are not an admin"})
+      res.status(403).json({messsage : "Unauthorized Admin Access"})
+    }
+  })
+};
+
+const verifyTokenAndShop = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if(req.user.id == req.shop.shopOwner || req.user.isAdmin ){
+      next()
+    }
+    else{
+      res.status(403).json({message : "Unauthorized Shop Access"})
     }
   })
 };
 
 
-module.exports = {verifyToken, verifyTokenAndAuth, verifyTokenAndAdmin, }
+module.exports = {verifyToken, verifyTokenAndAuth, verifyTokenAndAdmin, verifyTokenAndShop }

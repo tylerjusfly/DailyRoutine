@@ -6,7 +6,9 @@ const _ = require('lodash');
 
 exports.productController = {
   productById : async(req, res, next, id) => {
+    // console.log(req.shop)
     const product = await Product.findById(id)
+
     if(!product){ res.status(500).json({ message : "Product Does not exist"});}
     try {
       req.product = product
@@ -77,7 +79,7 @@ exports.productController = {
   }, //end of create
 
   getAll : async(req, res, next) => {
-    const alls = await Product.find();
+    const alls = await Product.find({shop : req.params.shopId}).populate('shop', 'shopName shopOwner');
     res.status(200).send({
       message : "Getting all Products",
       count : alls.length,

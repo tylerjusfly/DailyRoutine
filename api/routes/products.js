@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router({mergeParams : true})
-const {verifyToken, verifyTokenAndAdmin, verifyTokenAndAuth} = require('../controllers/verifyToken');
+const {verifyToken, verifyTokenAndAdmin, verifyTokenAndAuth, verifyTokenAndShop} = require('../controllers/verifyToken');
 const {productController} = require('../controllers/products')
 
 
-router.post('/', verifyToken, productController.create);
+router.post('/', verifyTokenAndShop, productController.create);
 
 router.get('/', verifyTokenAndAdmin, productController.getAll);
 
-router.get('/:productId', verifyToken, productController.getById);
+router.get('/:productId', verifyTokenAndShop, productController.getById);
 
+// edit product from shops
 router.put('/:productId', verifyToken, productController.Edit);
 
 router.delete('/del/:productId', verifyToken, verifyTokenAndAuth, productController.delete)

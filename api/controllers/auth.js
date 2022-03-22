@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 exports.authController = {
 
   // Register
-  create : async(req, res, next) => {
+  create : (req, res, next) => {
     User.find( {email : req.body.email})
     .exec()
     .then(user => {
@@ -20,6 +20,7 @@ exports.authController = {
           }
           else{
             const user = new User({
+              name : req.body.name,
               email : req.body.email,
               pass : hash
             });
@@ -31,7 +32,8 @@ exports.authController = {
               });
             })
             .catch(err => {
-              res.status(500).json({error : err})
+              console.log(err)
+              res.status(500).json({errorme : err})
             });
           }
       

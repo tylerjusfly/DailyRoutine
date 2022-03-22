@@ -2,6 +2,19 @@ const Shop = require('../models/shop');
 
 exports.shopController = {
 
+  ShopById : async(req, res, next, id) => {
+    const shop = await Shop.findById(id)
+    if(!shop){ res.status(500).json({ message : "shop Does not exist"});}
+    try {
+      req.shop = shop
+      next()
+    } catch (error) {
+      res.status(500).json({ message : "shop Error"});  
+    }
+
+
+  },
+
   create : async(req, res, next) => {
     const existing = await Shop.shopNameExist(req.body.shopName)
 
@@ -29,10 +42,10 @@ exports.shopController = {
   } ,//End of create
 
   edit : async(req, res , next) => {
-    const shopId = await Shop.findById(req.params.id)
+    const shop = req.shop
     
     try{
-      const updatedShop = await Shop.findByIdAndUpdate(shopId, {
+      const updatedShop = await Shop.findByIdAndUpdate(shop._id, {
         $set : req.body
       }, {new : true});
       res.status(200).json(updatedShop);
@@ -62,7 +75,28 @@ exports.shopController = {
       res.status(500).json(err);
     }
 
-  }
+  },
+
+  getById : (req, res, next) => {
+    return res.status(200).json(req.shop)
+    
+    }, //end of get by id
+
+    delete : async(req, res, next) => {
+      let shop = req.shop
+      try {
+        await shop.remove();
+        res.status(200).json({
+          product : null,
+          message : "shop deleted Successfully"
+                })
+        
+      } catch (error) {
+        res.status(500).json("Shop Could not be deleted");
+        
+      }
+
+    }
 
 
 
