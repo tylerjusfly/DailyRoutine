@@ -6,7 +6,8 @@ const CategorySchema = mongoose.Schema({
     trim :true, 
     required : true,
     maxlength : 40
-  }
+  },
+  shop : {type : mongoose.Schema.Types.ObjectId, ref: 'Shop'},
 }, {timestamps : true}
 );
 

@@ -10,8 +10,8 @@ const indexRoute = require('./api/routes/index');
 const productRoute = require('./api/routes/products');
 const ordersRoute = require('./api/routes/orders');
 const usersRoute = require('./api/routes/user');
-const authRoute = require('./api/routes/auth')
-const shopRoute = require('./api/routes/shop')
+const authRoute = require('./api/routes/auth');
+const shopRoute = require('./api/routes/shop');
 
 // DataBase
 const url = 'mongodb://localhost:27017/anyshop';
@@ -42,6 +42,7 @@ app.use('/orders', ordersRoute);
 app.use('/users', usersRoute);
 app.use('/auth', authRoute);
 app.use('/shop', shopRoute);
+
 
 
 // catch 404 and forward to error handler

@@ -17,7 +17,6 @@ exports.productController = {
       res.status(500).json({ message : "Product Not Found"});  
     }
 
-
   },
 
 
@@ -79,8 +78,8 @@ exports.productController = {
   }, //end of create
 
   getAll : async(req, res, next) => {
-    const alls = await Product.find({shop : req.params.shopId}).populate('shop', 'shopName shopOwner');
-    res.status(200).send({
+    const alls = await Product.find({shop : req.params.shopId}).populate('shop category', 'shopName shopOwner name');
+    res.status(200).json({
       message : "Getting all Products",
       count : alls.length,
       products : alls.map( all => {
@@ -88,6 +87,7 @@ exports.productController = {
           _id : all._id,
           name : all.name,
           price : all.price,
+          category : all.category,
           shop : all.shop,
           request : {
             type : 'GET',
@@ -165,6 +165,21 @@ exports.productController = {
       } catch (error) {
         res.status(500).json("Product Could not be deleted");
         
+      }
+
+    }, //end of delete
+
+    /* 
+    We are getting products based on categories.
+    */
+    relatedProducts : async(req, res, next) => {
+      try {
+        const related = await Product.find({ _id : {$ne : req.product}, category : req.product.category })
+        .populate('category', 'name')
+        res.status(200).json(related)
+        
+      } catch (error) {
+        res.status(500).json("Product Not Found");
       }
 
     }

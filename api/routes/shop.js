@@ -3,7 +3,9 @@ const router = express.Router();
 const{shopController} = require('../controllers/shop');
 const products = require('./products');
 const category = require('./category');
-const { verifyToken, verifyTokenAndAuth, verifyTokenAndAdmin, verifyTokenAndShop } = require('../controllers/verifyToken');
+const coupon = require('./coupon');
+const order = require('./orders');
+const { verifyToken, verifyTokenAndAdmin, verifyTokenAndShop } = require('../controllers/verifyToken');
 
 router.post('/', verifyToken, shopController.create);
 // Update shop
@@ -20,6 +22,9 @@ router.delete('/:shopId', verifyTokenAndShop, shopController.delete);
 
 router.use('/:shopId/products', products);
 router.use('/:shopId/category', category);
+router.use('/:shopId/coupon', coupon);
+router.use('/:shopId/order', order);
+
 
 router.param('shopId', shopController.ShopById);
 
