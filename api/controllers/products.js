@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 exports.productController = {
   productById : async(req, res, next, id) => {
-    // console.log(req.shop)
+    
     const product = await Product.findById(id).populate('shop', 'shopName')
 
     if(!product){ res.status(500).json({ message : "Product Does not exist"});}

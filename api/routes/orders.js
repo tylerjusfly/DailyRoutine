@@ -4,6 +4,9 @@ const {orderController} = require('../controllers/order');
 
 router.post('/', orderController.create);
 
+router.post('/pay/:orderId')
 
+
+router.param('orderId', orderController.orderById);
 
 module.exports = router;

@@ -2,6 +2,21 @@ const Order = require('../models/order');
 const Product = require('../models/products')
 
 exports.orderController = {
+  orderById : async(req, res, next, id) => {
+    
+    const order = await Order.findById(id)
+
+    if(!order){ res.status(500).json({ message : "Order Does not exist"});}
+    try {
+      req.order = order
+      next()
+    } catch (error) {
+      res.status(500).json({ message : "order Not Found"});  
+    }
+
+  },
+
+
   create : async(req, res, next) => {
     const {
       product,
