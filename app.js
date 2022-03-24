@@ -11,10 +11,8 @@ const mongoose = require("mongoose");
 // Creating Routes
 
 const indexRoute = require("./api/routes/index");
-const productRoute = require("./api/routes/products");
-const ordersRoute = require("./api/routes/orders");
-const usersRoute = require("./api/routes/user");
 const authRoute = require("./api/routes/auth");
+const usersRoute = require("./api/routes/user");
 const shopRoute = require("./api/routes/shop");
 const paymentRoute = require("./api/routes/payments");
 
