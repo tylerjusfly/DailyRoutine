@@ -4,7 +4,7 @@
   "description": "A NodeJs Restful Api",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "formidable": "^2.0.1",
     "http-errors": "^2.0.0",
@@ -19,6 +20,10 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.2.6",
     "morgan": "^1.10.0",
+<<<<<<< HEAD
+=======
+    "nodemon": "^2.0.15",
+>>>>>>> 90dfdb51f89ee0e456786981a97b7758afb37b96
     "paypal-rest-sdk": "^1.8.1"
   }
 }
