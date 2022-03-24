@@ -57,8 +57,19 @@ exports.shopController = {
   },
   getByuser : async(req, res, next) => {
     try {
-      const shops = await Shop.find({shopOwner : req.user.id})
-      res.status(200).json(shops)
+      const shops = await Shop.find({shopOwner : req.user.id}).populate('shopOwner', 'name email')
+      res.status(200).json({
+        status : 'success',
+        count : shops.length,
+        shops : shops.map( shop => {
+          return {
+            _id : shop._id,
+            name : shop.shopName,
+            desc : shop.description,
+            owner : shop.shopOwner,
+          }
+        }) //end
+      })
       
     } catch (err) {
       res.status(500).json(err);

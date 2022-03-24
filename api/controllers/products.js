@@ -7,7 +7,7 @@ const _ = require('lodash');
 exports.productController = {
   productById : async(req, res, next, id) => {
     // console.log(req.shop)
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('shop', 'shopName')
 
     if(!product){ res.status(500).json({ message : "Product Does not exist"});}
     try {
@@ -16,7 +16,6 @@ exports.productController = {
     } catch (error) {
       res.status(500).json({ message : "Product Not Found"});  
     }
-
 
   },
 
@@ -79,8 +78,8 @@ exports.productController = {
   }, //end of create
 
   getAll : async(req, res, next) => {
-    const alls = await Product.find({shop : req.params.shopId}).populate('shop', 'shopName shopOwner');
-    res.status(200).send({
+    const alls = await Product.find({shop : req.params.shopId}).populate('shop category', 'shopName shopOwner name');
+    res.status(200).json({
       message : "Getting all Products",
       count : alls.length,
       products : alls.map( all => {
@@ -88,6 +87,7 @@ exports.productController = {
           _id : all._id,
           name : all.name,
           price : all.price,
+          category : all.category,
           shop : all.shop,
           request : {
             type : 'GET',
@@ -100,7 +100,7 @@ exports.productController = {
 
   getById : (req, res, next) => {
     req.product.image = undefined
-    return res.status(200).json(req.product)
+    return res.status(200).json(req.product);
     
       
     }, //end of get by id
@@ -114,7 +114,7 @@ exports.productController = {
         if(err){
           return res.status(400).json({ error : "image could not be upoaded"});
         }
-          console.log(req.product)
+        
         // check for all fields
         const {name, desc, productType, serialCode, price, stockCount, category} = fields
         if( !name|| !desc|| !productType|| !serialCode|| !price || !stockCount || !category){
@@ -165,6 +165,21 @@ exports.productController = {
       } catch (error) {
         res.status(500).json("Product Could not be deleted");
         
+      }
+
+    }, //end of delete
+
+    /* 
+    We are getting products based on categories.
+    */
+    relatedProducts : async(req, res, next) => {
+      try {
+        const related = await Product.find({ _id : {$ne : req.product}, category : req.product.category })
+        .populate('category', 'name')
+        res.status(200).json(related)
+        
+      } catch (error) {
+        res.status(500).json("Product Not Found");
       }
 
     }

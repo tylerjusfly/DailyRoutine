@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // Creating Routes
+
 const indexRoute = require("./api/routes/index");
 const productRoute = require("./api/routes/products");
 const ordersRoute = require("./api/routes/orders");
@@ -16,6 +17,7 @@ const usersRoute = require("./api/routes/user");
 const authRoute = require("./api/routes/auth");
 const shopRoute = require("./api/routes/shop");
 const paymentRoute = require("./api/routes/payments");
+
 
 // DataBase
 const url = "mongodb://localhost:27017/anyshop";
@@ -49,6 +51,7 @@ app.use("/users", usersRoute);
 app.use("/auth", authRoute);
 app.use("/shop", shopRoute);
 app.use("/pay", paymentRoute);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
