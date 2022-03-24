@@ -20,10 +20,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.2.6",
     "morgan": "^1.10.0",
-<<<<<<< HEAD
-=======
     "nodemon": "^2.0.15",
->>>>>>> 90dfdb51f89ee0e456786981a97b7758afb37b96
     "paypal-rest-sdk": "^1.8.1"
   }
 }
